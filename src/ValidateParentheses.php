@@ -6,6 +6,7 @@ namespace App;
  */
 class ValidateParentheses
 {
+    protected const VALID_SYMBOLS = ['(', ')'];
     /**
      * Строка для проверки
      *
@@ -34,6 +35,10 @@ class ValidateParentheses
         $validator = 0;
 
         foreach ($parensArray as $item) {
+            if (!in_array($item, self::VALID_SYMBOLS)) {
+                throw new \InvalidArgumentException();
+            }
+
             if ($item === '(') {
                 $validator++;
             }

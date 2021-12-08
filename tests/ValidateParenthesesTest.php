@@ -10,20 +10,35 @@ use App\ValidateParentheses;
 class ValidateParenthesesTest extends TestCase
 {
     /**
-     * Тест для проверки метода валидации
+     * Тест для проверки метода валидации с правильными данными
      *
-     * @dataProvider dataProviderForValidate
+     * @dataProvider dataProviderValid
      * @param string $actual
      * @param bool   $expected
      */
-    public function testValidate(string $actual, bool $expected): void
+    public function testValidateValidData(string $actual, bool $expected): void
     {
         $validation = new ValidateParentheses($actual);
 
         $this->assertEquals($validation->validate(), $expected);
     }
 
-    public function dataProviderForValidate(): array
+    /**
+     * Тест для проверки метода валидации с неправильными данными
+     *
+     * @dataProvider dataProviderInvalid
+     * @param string $data
+     */
+    public function testValidateInvalidData(string $data): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $validation = new ValidateParentheses($data);
+
+        $validation->validate();
+    }
+
+    public function dataProviderValid(): array
     {
         return [
             ['(())', true],
@@ -31,6 +46,15 @@ class ValidateParenthesesTest extends TestCase
             [')', false],
             ['(()()()((((()))))', false],
             ['(()()())((()))', true],
+        ];
+    }
+
+    public function dataProviderInvalid(): array
+    {
+        return [
+            ['qdqwdq'],
+            ['dqwdqdqw'],
+            ['dqwdqdqdq'],
         ];
     }
 }
